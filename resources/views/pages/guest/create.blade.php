@@ -5,10 +5,14 @@
         <form action="{{ route('guest.store') }}" method="POST">
             @csrf
             <div class="row d-flex flex-wrap">
-                <div class="col-md-6 mt-4">
+                <div class="text-center mb-5">
+                    <h6 class="display-7 fw-bolder mt-5"><span class="text-gradient d-inline">-- ISI DATA DIRI ANDA --</span>
+                    </h6>
+                </div>
+                <div class="col-md-6 mt-2">
                     <input type="text" class="form-control" name="nik" placeholder="NIK KTP/PASSPORT" required>
                 </div>
-                <div class="col-md-6 mt-4">
+                <div class="col-md-6 mt-2">
                     <input type="text" class="form-control" name="nama" placeholder="NAMA LENGKAP" required>
                 </div>
                 <div class="col-md-12 mt-4">
@@ -74,15 +78,15 @@
                 <!-- Page Content-->
                 <div class="container px-5 my-5">
                     <div class="text-center mb-5">
-                        <h4 class="display-6 fw-bolder mb-0"><span class="text-gradient d-inline">GASG - Education</span>
-                        </h4>
+                        <h5 class="display-7 fw-bolder mb-0"><span class="text-gradient d-inline">GASG - Education</span>
+                        </h5>
                     </div>
                     <div class="row gx-5 justify-content-center">
                         <div class="col-lg-11 col-xl-9 col-xxl-8">
                             <!-- Experience Section-->
                             <section>
                                 <div class="d-flex align-items-center justify-content-between mb-4">
-                                    <h2 class="text-primary fw-bolder mb-0">Experience</h2>
+                                    <h5 class="text-primary fw-bolder mb-0">>> Taking Foto</h5>
                                     <!-- Download resume button-->
                                     <!-- Note: Set the link href target to a PDF file within your project-->
                                     {{-- <a class="btn btn-primary px-4 py-3" href="#!">
@@ -137,7 +141,7 @@
                             </section>
                             <!-- Education Section-->
                             <section>
-                                <h2 class="text-secondary fw-bolder mb-4">Education</h2>
+                                <h5 class="text-secondary fw-bolder mb-4">>> Education</h5>
                                 <!-- Education Card 1-->
                                 <div class="card shadow border-0 rounded-4 mb-5">
                                     <div class="card-body p-5">
