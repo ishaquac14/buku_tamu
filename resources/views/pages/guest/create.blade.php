@@ -15,47 +15,30 @@
                 <div class="col-md-6 mt-2">
                     <input type="text" class="form-control" name="nama" placeholder="NAMA LENGKAP" required>
                 </div>
-                <div class="col-md-12 mt-4">
+                <div class="col-md-6 mt-4">
                     <input type="text" class="form-control" name="asal_perusahaan" placeholder="ASAL PERUSAHAAN"
                         required>
                 </div>
-                <div class="col-md-4 mt-4">
-                    <input type="text" class="form-control" name="nama_pic" placeholder="NAMA PIC YANG DITUJU" required>
+                <div class="col-md-6 mt-4">
+                    <input type="number" class="form-control" name="no_hp_tamu" placeholder="NO HANDPHONE" required>
                 </div>
-                <div class="col-md-4 mt-4">
-                    <select name="departemen" class="form-select" id="DepartemenSelect" contenteditable="true" required>
-                        <option value="" disabled selected>--Departemen--</option>
-                        <option value="Advisor">Advisor</option>
-                        <option value="ENG & QA Electric Components">ENG & QA Electric Components</option>
-                        <option value="Engineering Body">Engineering Body</option>
-                        <option value="Engineering Unit">Engineering Unit</option>
-                        <option value="Human Resources Development & General Affairs">Human Resources Development & General
-                            Affairs</option>
-                        <option value="Industrial Relation & Legal">Industrial Relation & Legal</option>
-                        <option value="Information Technology Development">Information Technology Development</option>
-                        <option value="Machine Maintenance">Machine Maintenance</option>
-                        <option value="Maintenance">Maintenance</option>
-                        <option value="Management System">Management System</option>
-                        <option value="Plant Director">Plant Director</option>
-                        <option value="President Director">President Director</option>
-                        <option value="Production Body">Production Body</option>
-                        <option value="Production Electric Components">Production Electric Components</option>
-                        <option value="Production Planning & Inventory Control">Production Planning & Inventory Control
-                        </option>
-                        <option value="Production Planning & Inventory Control Electric Components">Production Planning &
-                            Inventory Control Electric Components</option>
-                        <option value="Procuction System & Development">Procuction System & Development</option>
-                        <option value="Production Unit DC">Production Unit DC</option>
-                        <option value="Production Unit MA">Production Unit MA</option>
-                        <option value="Quality Body">Quality Body</option>
-                        <option value="Quality Unit">Quality Unit</option>
-                        <option value="Vice President Director">Vice President Director</option>
-                        <option value="Tidak Ada">--Tidak Ada--</option>
+                <div class="col-md-6 mt-4">
+                    <select id="nama_pic" class="form-control" name="nama_pic" required>
+                        <option value="" disabled selected>--- INPUT PIC AIIA ---</option>
+                        @foreach ($users as $user)
+                            <option value="{{ $user->id }}" data-department="{{ $user->department }}">
+                                {{ $user->full_name }}
+                            </option>
+                        @endforeach
                     </select>
                 </div>
-                <div class="col-md-4 mt-4">
+                <div class="col-md-6 mt-4">
+                    <input type="text" id="departemen" class="form-control" name="departemen" placeholder="DEPARTMENT"
+                        readonly required>
+                </div>
+                <div class="col-md-6 mt-4">
                     <select name="tujuan_lokasi" class="form-select" id="TujuanLokasiSelect" required>
-                        <option value="" disabled selected>--Tujuan Lokasi--</option>
+                        <option value="" disabled selected>--- TUJUAN LOKASI ---</option>
                         <option value="Level 0 - Loker">Level 0 - Loker</option>
                         <option value="Level 0 - Parkiran Mobil">Level 0 - Parkiran Mobil</option>
                         <option value="Level 0 - Parkiran Motor">Level 0 - Parkiran Motor</option>
@@ -71,8 +54,11 @@
                         <option value="Level 3 - Area Gas PGN">Level 3 - Area Gas PGN</option>
                     </select>
                 </div>
+                <div class="col-md-6 mt-4">
+                    <input type="text" name="kartu" class="form-control" id="KartuInput" readonly placeholder="-- PILIH LOKASI DULU --">
+                </div>
                 <div class="col-md-12 mt-4">
-                    <textarea class="form-control" name="tujuan" placeholder="TUJUAN" rows="5" required></textarea>
+                    <textarea class="form-control" name="tujuan" placeholder="TUJUAN" rows="3" required></textarea>
                 </div>
 
                 <!-- Page Content-->
@@ -234,9 +220,29 @@
         </form>
     </div>
 
-    <!-- Add WebcamJS library -->
+    <!-- Add jQuery and Select2 library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js"></script>
     <script language="JavaScript">
+        // Initialize Select2 on nama_pic
+        $('#nama_pic').select2({
+            placeholder: '--- INPUT PIC AIIA ---',
+            allowClear: true
+        });
+
+        // Update department field based on selected PIC
+        $('#nama_pic').on('change', function () {
+            var selectedOption = $(this).find(':selected');
+            var department = selectedOption.data('department');
+            $('#departemen').val(department);
+        });
+
+        // Focus on Select2 element when clicked
+        $('#nama_pic').on('select2:open', function () {
+            $(".select2-search__field").focus();
+        });
+
         // Configure a few settings and attach camera
         Webcam.set({
             width: 320,
@@ -260,6 +266,20 @@
             document.getElementById('camera_wrapper').innerHTML = '<div id="my_camera"></div>';
             Webcam.attach('#my_camera');
         }
+
+        // ini integrasi kartu
+        document.getElementById('TujuanLokasiSelect').addEventListener('change', function() {
+            const kartuInput = document.getElementById('KartuInput');
+            const selectedOption = this.options[this.selectedIndex].value;
+
+            if (selectedOption.includes('Level 2')) {
+                kartuInput.value = 'SILAHKAN AMBIL KARTU BERWARNA KUNING DI SECURITY !!';
+            } else if (selectedOption.includes('Level 3')) {
+                kartuInput.value = 'SILAHKAN AMBIL KARTU BERWARNA KUNING DI SECURITY !!';
+            } else {
+                kartuInput.value = 'TANPA MENGGUNAKAN KARTU';
+            }
+        });
     </script>
 
     <style>

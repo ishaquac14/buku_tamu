@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('full_name');
             $table->string('department');
             $table->string('no_hp');
-            $table->string('npk')->unique();
+            $table->string('npk');
             $table->timestamps();
         });
     }

@@ -3,51 +3,108 @@
 namespace App\Http\Controllers;
 
 use App\Models\Guest;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
 
 class GuestController extends Controller
 {
     public function index()
     {
-        return view('pages.guest.index');
+        $guests = Guest::all();
+        return view('pages.guest.index', compact('guests'));
     }
 
     public function create()
     {
-        return view('pages.guest.create');
+        $users = User::all();
+        return view('pages.guest.create', compact('users'));
     }
 
     public function store(Request $request)
     {
-        // Validasi data yang dikirimkan dari form
-        $request->validate([
-            'nik' => 'required|string',
-            'nama' => 'required|string',
-            'asal_perusahaan' => 'required|string',
-            'nama_pic' => 'required|string',
-            'departemen' => 'required|string',
-            'tujuan_lokasi' => 'required|string',
-            'tujuan' => 'required|string',
+        $validatedData = $request->validate([
+            'nik' => 'required|string|max:255',
+            'nama' => 'required|string|max:255',
+            'asal_perusahaan' => 'required|string|max:255',
+            'no_hp_tamu' => 'required|numeric',
+            'nama_pic' => 'required|integer',
+            'departemen' => 'required|string|max:255',
+            'tujuan_lokasi' => 'required|string|max:255',
+            'kartu' => 'required|string|max:255',
+            'tujuan' => 'required|string|max:255',
+            'image' => 'required|string',
         ]);
 
-        // Simpan data ke dalam database atau lakukan tindakan sesuai kebutuhan
-        $guest = new Guest();
-        $guest->nik = $request->nik;
-        $guest->nama = $request->nama;
-        $guest->asal_perusahaan = $request->asal_perusahaan;
-        $guest->nama_pic = $request->nama_pic;
-        $guest->departemen = $request->departemen;
-        $guest->tujuan_lokasi = $request->tujuan_lokasi;
-        $guest->tujuan = $request->tujuan;
-        $guest->save();
+        Guest::create($validatedData);
 
-        // Jika berhasil disimpan, redirect atau kembalikan response sesuai kebutuhan
-        if ($guest->save()) {
-            // Redirect dengan pesan sukses
-            return redirect()->route('welcome')->with('success', 'Data tamu berhasil disimpan.');
-        } else {
-            // Redirect dengan pesan error
-            return redirect()->back()->withInput()->with('error', 'Gagal menyimpan data tamu. Silakan coba lagi.');
-        }
+        return redirect()->route('guest.index')->with('success', 'Guest created successfully');
+    }
+
+    public function edit($id)
+    {
+        $guest = Guest::findOrFail($id);
+        $users = User::all();
+        return view('pages.guest.edit', compact('guest', 'users'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $guest = Guest::findOrFail($id);
+
+        $validatedData = $request->validate([
+            'nik' => 'required|string|max:255',
+            'nama' => 'required|string|max:255',
+            'asal_perusahaan' => 'required|string|max:255',
+            'no_hp_tamu' => 'required|numeric',
+            'nama_pic' => 'required|integer',
+            'departemen' => 'required|string|max:255',
+            'tujuan_lokasi' => 'required|string|max:255',
+            'kartu' => 'required|string|max:255',
+            'tujuan' => 'required|string|max:255',
+            'image' => 'required|string',
+        ]);
+
+        $guest->update($validatedData);
+
+        return redirect()->route('guest.index')->with('success', 'Guest updated successfully');
+    }
+
+    public function destroy($id)
+    {
+        $guest = Guest::findOrFail($id);
+        $guest->delete();
+
+        return redirect()->route('guest.index')->with('success', 'Guest deleted successfully');
+    }
+
+    public function show($id)
+    {
+        $guest = Guest::findOrFail($id);
+        return view('pages.guest.detail', compact('guest'));
+    }
+
+    public function downloadPdf($id)
+    {
+        $guest = Guest::findOrFail($id);
+        $pdf = Pdf::loadView('pages.guest.pdf', compact('guest'));
+        return $pdf->download('guest_details_' . $guest->nama . '.pdf');
+    }
+
+    public function savePhoto(Request $request)
+    {
+        $data_uri = $request->input('image');
+        $file_name = 'guest_' . time() . '.png';
+
+        // Decode base64 string
+        $data = explode(',', $data_uri)[1];
+        $data = base64_decode($data);
+
+        // Save the file
+        Storage::disk('public')->put('guest_photos/' . $file_name, $data);
+
+        // Return the file path
+        return response()->json(['file_path' => Storage::url('guest_photos/' . $file_name)]);
     }
 }

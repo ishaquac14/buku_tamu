@@ -3,33 +3,40 @@
 @section('body')
     <div class="container px-5">
         <div class="row">
-            <div class="col-12">
+            <div class="col-md-12">
                 <div class="text-center mb-4 mt-4">
-                    <h6 class="text-primary fw-bolder">-- USERS LIST --</h6>
+                    <h6 class="text-primary fw-bolder">-- GUESTS LIST --</h6>
                 </div>
-                <a href="{{ route('users.create') }}" class="btn btn-primary mb-3">Create User</a>
+                <a href="{{ route('guest.create') }}" class="btn btn-primary mb-3">Add Guest</a>
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
                 <table id="myTable" class="table table-bordered table-striped table-hover" style="width: 100%">
                     <thead>
                         <tr>
-                            <th class="text-center" style="width: 20px">No</th>
-                            <th class="text-center">Full Name</th>
-                            <th class="text-center">Department</th>
-                            <th class="text-center">No Handphone</th>
-                            <th class="text-center">NPK</th>
+                            <th class="text-center">No</th>
+                            <th class="text-center">NIK</th>
+                            <th class="text-center">Nama</th>
+                            <th class="text-center">Asal Perusahaan</th>
+                            <th class="text-center">PIC</th>
                             <th class="text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($users as $user)
+                        @foreach ($guests as $guest)
                             <tr>
                                 <td class="text-center">{{ $loop->iteration }}</td>
-                                <td class="text-center">{{ $user->full_name }}</td>
-                                <td class="text-center">{{ $user->department }}</td>
-                                <td class="text-center">{{ $user->no_hp }}</td>
-                                <td class="text-center">{{ $user->npk }}</td>
+                                <td class="text-center">{{ $guest->nik }}</td>
+                                <td class="text-center">{{ $guest->nama }}</td>
+                                <td class="text-center">{{ $guest->asal_perusahaan }}</td>
+                                <td class="text-center">{{ optional($guest->user)->full_name }}</td>
+                                {{-- <td><img src="{{ $guest->image }}" alt="Guest Image" class="img-fluid" style="max-width: 100px;"></td> --}}
                                 <td class="text-center">
-                                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                    <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirmDelete(this);">
+                                    <a href="{{ route('guest.show', $guest->id) }}" class="btn btn-info btn-sm">Detail</a>
+                                    <a href="{{ route('guest.edit', $guest->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                    <form action="{{ route('guest.destroy', $guest->id) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>

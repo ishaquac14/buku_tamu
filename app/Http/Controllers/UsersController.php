@@ -5,15 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class UsersController extends Controller
 {
     public function index()
     {
         $users = User::all();
-        return view('users.index', compact('users'));
+        return view('pages.users.index', compact('users'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         return view('pages.users.create');
     }
@@ -24,16 +24,17 @@ class UserController extends Controller
             'full_name' => 'required|string|max:255',
             'department' => 'required|string|max:255',
             'no_hp' => 'required|string|max:20',
-            'npk' => 'required|string|size:6|unique:users,npk',
+            'npk' => 'required|string',
         ]);
 
+        // dd($request->all()); 
         User::create($request->all());
         return redirect()->route('users.index');
     }
 
     public function edit(User $user)
     {
-        return view('users.edit', compact('users'));
+        return view('pages.users.edit', compact('user'));
     }
 
     public function update(Request $request, User $user)
@@ -42,7 +43,7 @@ class UserController extends Controller
             'full_name' => 'required|string|max:255',
             'department' => 'required|string|max:255',
             'no_hp' => 'required|string|max:20',
-            'npk' => 'required|string|size:6|unique:users,npk,' . $user->id,
+            'npk' => 'required|string',
         ]);
 
         $user->update($request->all());

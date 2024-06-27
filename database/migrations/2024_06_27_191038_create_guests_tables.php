@@ -13,7 +13,19 @@ return new class extends Migration
     {
         Schema::create('guests', function (Blueprint $table) {
             $table->id();
+            $table->string('nik');
+            $table->string('nama');
+            $table->string('asal_perusahaan');
+            $table->string('no_hp_tamu');
+            $table->unsignedBigInteger('nama_pic');
+            $table->string('departemen');
+            $table->string('tujuan_lokasi');
+            $table->string('kartu');
+            $table->text('tujuan');
+            $table->text('image');
             $table->timestamps();
+
+            $table->foreign('nama_pic')->references('id')->on('users');
         });
     }
 

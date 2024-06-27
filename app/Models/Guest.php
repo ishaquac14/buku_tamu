@@ -13,9 +13,12 @@ class Guest extends Model
         'nik',
         'nama',
         'asal_perusahaan',
+        'no_hp_tamu',
         'nama_pic',
         'departemen',
         'tujuan_lokasi',
+        'kartu',
         'tujuan',
+        'image',
     ];
 }

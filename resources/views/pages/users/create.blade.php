@@ -2,11 +2,12 @@
 
 @section('body')
     <div class="container px-5">
-        <form action="{{ route('users.create') }}" method="POST">
+        <form action="{{ route('users.store') }}" method="POST">
             @csrf
+            @method('POST')
             <div class="row d-flex flex-wrap">
-                <div class="text-center mb-4">
-                    <h7 class="text-primary fw-bolder">Create Users</h7>
+                <div class="text-center mb-4 mt-4">
+                    <h7 class="text-primary fw-bolder">CREATE USERS</h7>
                 </div>
                 <div class="col-md-6 mt-3">
                     <input class="form-control" type="text" name="full_name" placeholder="Full Name">

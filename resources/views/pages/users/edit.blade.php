@@ -7,7 +7,7 @@
             @method('PUT')
             <div class="row d-flex flex-wrap">
                 <div class="text-center mb-4">
-                    <h7 class="text-primary fw-bolder">Edit User</h7>
+                    <h7 class="text-warning fw-bolder">EDIT USERS</h7>
                 </div>
                 <div class="col-md-6 mt-3">
                     <input class="form-control" type="text" name="full_name" value="{{ $user->full_name }}" placeholder="Full Name">
@@ -25,7 +25,7 @@
             <div class="row justify-content-left">
                 <div class="mt-4 mb-4 text-start">
                     <div class="">
-                        <button class="btn btn-primary">Update</button>
+                        <button class="btn btn-warning">Update</button>
                     </div>
                 </div>
             </div>
