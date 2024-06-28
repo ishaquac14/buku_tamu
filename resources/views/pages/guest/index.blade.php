@@ -36,10 +36,12 @@
                                 <td class="text-center">
                                     <a href="{{ route('guest.show', $guest->id) }}" class="btn btn-info btn-sm">Detail</a>
                                     <a href="{{ route('guest.edit', $guest->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                    <form action="{{ route('guest.destroy', $guest->id) }}" method="POST" class="d-inline">
+                                    <form action="{{ route('guest.destroy', $guest->id) }}" method="POST" class="d-inline"
+                                        id="delete-form-{{ $guest->id }}">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                        <button type="button" class="btn btn-danger btn-sm"
+                                            onclick="confirmDelete({{ $guest->id }})">Delete</button>
                                     </form>
                                 </td>
                             </tr>
@@ -64,11 +66,12 @@
             $('#myTable').DataTable();
         });
 
-        function confirmDelete(form) {
-            if (confirm('Are you sure you want to delete this user?')) {
-                form.submit();
-            } else {
-                return false;
+    </script>
+
+    <script>
+        function confirmDelete(id) {
+            if (confirm('Apakah yakin akan dihapus?')) {
+                document.getElementById('delete-form-' + id).submit();
             }
         }
     </script>
